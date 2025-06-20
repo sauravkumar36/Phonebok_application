@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Phonebook App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📞 Phonebook App</h1>
+
+    <section class="card">
+      <h2>Add Contact</h2>
+      <input type="text" id="addName" placeholder="Enter name" />
+      <input type="text" id="addNumber" placeholder="Enter phone number" />
+      <button onclick="addContact()">Add</button>
+    </section>
+
+    <section class="card">
+      <h2>Search by Name</h2>
+      <input type="text" id="searchName" placeholder="Enter full name" />
+      <button onclick="searchByName()">Search</button>
+      <div id="resultByName" class="result-box"></div>
+    </section>
+
+    <section class="card">
+      <h2>Search by Prefix</h2>
+      <input type="text" id="searchPrefix" placeholder="Enter prefix" />
+      <button onclick="searchByPrefix()">Search</button>
+      <div id="resultByPrefix" class="result-box"></div>
+    </section>
+  </div>
+
+  <script>
+    // Dummy in-memory data (for now)
+    const phonebook = {};
+
+    function addContact() {
+      const name = document.getElementById("addName").value.trim();
+      const number = document.getElementById("addNumber").value.trim();
+      if (name && number) {
+        phonebook[name] = number;
+        alert(`Contact ${name} added.`);
+        document.getElementById("addName").value = "";
+        document.getElementById("addNumber").value = "";
+      } else {
+        alert("Please enter both name and number.");
+      }
+    }
+
+    function searchByName() {
+      const name = document.getElementById("searchName").value.trim();
+      const resultBox = document.getElementById("resultByName");
+      resultBox.innerHTML = "";
+      if (name in phonebook) {
+        resultBox.innerHTML = `<p><strong>${name}:</strong> ${phonebook[name]}</p>`;
+      } else {
+        resultBox.innerHTML = "<p>Contact not found.</p>";
+      }
+    }
+
+    function searchByPrefix() {
+      const prefix = document.getElementById("searchPrefix").value.trim().toLowerCase();
+      const resultBox = document.getElementById("resultByPrefix");
+      resultBox.innerHTML = "";
+      const results = Object.entries(phonebook).filter(([name]) =>
+        name.toLowerCase().startsWith(prefix)
+      );
+      if (results.length === 0) {
+        resultBox.innerHTML = "<p>No contacts found.</p>";
+        return;
+      }
+      results.forEach(([name, number]) => {
+        resultBox.innerHTML += `<p><strong>${name}:</strong> ${number}</p>`;
+      });
+    }
+  </script>
+</body>
+</html>
